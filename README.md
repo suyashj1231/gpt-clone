@@ -1,57 +1,38 @@
-# My GPT — Built from Scratch
+# gpt-clone
 
-> Assembled from the NeetCode ML course on [NeetCode.io](https://neetcode.io)
-> Built by **Yash** on May 12, 2026
+A GPT language model built from first principles, one layer at a time: start with gradient descent and activation functions in NumPy, end with a decoder-only transformer in PyTorch that trains and generates text. Every component is written by hand and checked against a known answer before the next one builds on it.
 
-Every file in this project is code I wrote and submitted while completing the NeetCode ML course.
-The problems progressively build from gradient descent fundamentals all the way to a working GPT.
+**Status: in progress.** The math foundations are in; the network, tokenizer and transformer pieces are next.
 
-## Project Structure
+## Progress
+
+| Stage | Component | Status |
+|---|---|---|
+| Foundations | Gradient descent on f(x) = x² | ✅ `foundations/gradient_descent.py` |
+| | Sigmoid and ReLU | ✅ `foundations/activations.py` |
+| | Numerically stable softmax (max-subtraction before `exp`) | ✅ `foundations/softmax.py` |
+| | Loss functions, linear regression, single neuron | ⬜ |
+| Neural nets | Backprop by hand, multi-layer backprop, MLP, weight init | ⬜ |
+| | Training loop, diagnostics, dead-ReLU detection | ⬜ |
+| Language data | Character vocabulary, BPE tokenizer, batched loader | ⬜ |
+| Transformer | Embeddings, positional encoding, self-attention, multi-head attention | ⬜ |
+| | LayerNorm / RMSNorm, transformer block, GPT model | ⬜ |
+| Inference | Training run, autoregressive generation, KV cache, grouped-query attention | ⬜ |
+
+## Layout
 
 ```
-model/          Attention, Transformer, GPT architecture
-  attention.py             Self-attention head
-  multi_head_attention.py  Multi-headed attention
-  transformer.py           Transformer block
-  gpt.py                   GPT model
-  normalization.py         Layer normalization
-  batch_normalization.py   Batch normalization
-  rms_normalization.py     RMS normalization
-  embeddings.py            Word embeddings
-  positional_encoding.py   Positional encoding
-  kv_cache.py              KV-Cache for fast inference
-  grouped_query_attention.py  Grouped query attention
-
-data/           Data pipeline
-  tokenizer.py                BPE tokenizer
-  vocab.py                    Character-level vocabulary
-  loader.py                   Batched training data loader
-  dataset.py                  GPT dataset preparation
-  nlp_preprocessing.py        NLP preprocessing
-  tokenizer_utils.py          Tokenization edge cases
-
-train.py        GPT training loop
-generate.py     Text generation
-
-foundations/    Neural network primitives built from scratch
-  neuron.py, backprop.py, mlp.py, activations.py, loss.py,
-  training_loop.py, dead_relu_detector.py, ...
+foundations/   NumPy primitives: optimization, activations, softmax
+model/         transformer components (next)
+data/          tokenizer and data pipeline (next)
 ```
 
-## Quick Start
+## Run
 
 ```bash
 pip install -r requirements.txt
-python train.py
-python generate.py
+python -c "from foundations.softmax import Solution; import numpy as np; print(Solution().softmax(np.array([1000., 1001., 1002.])))"
+# [0.09   0.2447 0.6652]  (no overflow, thanks to the max shift)
 ```
 
-## Course
-
-This project was built by completing the [NeetCode ML Course](https://neetcode.io/practice?tab=coreSkills&topic=Machine+Learning):
-- Math Foundations (gradient descent, activations, loss functions)
-- Neural Networks from scratch (neuron, backprop, MLP)
-- PyTorch fundamentals
-- NLP pipeline (embeddings, tokenization, attention)
-- Transformer architecture
-- GPT model + text generation
+The exercises follow the sequence of the [NeetCode ML course](https://neetcode.io), which is also how each piece gets tested.
